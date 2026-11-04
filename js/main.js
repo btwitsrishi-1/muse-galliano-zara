@@ -329,6 +329,35 @@
       .fromTo(svg, { rotation: -8 }, { rotation: 8, duration: 1.4, ease: 'sine.inOut' }, 0);
   })();
 
+  /* ---------- VI · Beyond the report ---------- */
+  $$('.move').forEach((m, i) => {
+    const paths = $$('.d', m);
+    paths.forEach((p) => { const l = p.getTotalLength(); p.style.strokeDasharray = l; p.style.strokeDashoffset = l; });
+    gsap.from(m, { y: 50, opacity: 0, duration: 1.1, delay: i * 0.12, ease: 'power3.out', scrollTrigger: { trigger: '.moves', start: 'top 85%' } });
+    ScrollTrigger.create({ trigger: '.moves', start: 'top 80%', once: true, onEnter: () => gsap.to(paths, { strokeDashoffset: 0, duration: 1.8, delay: 0.3 + i * 0.25, stagger: 0.15, ease: 'power2.inOut' }) });
+  });
+  gsap.from('.context__pull', { clipPath: 'inset(0 100% 0 0)', duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.context__pull', start: 'top 85%' } });
+  $$('[data-count]').forEach((el) => {
+    const target = parseFloat(el.dataset.count), dec = parseInt(el.dataset.dec || '0', 10), pre = el.dataset.prefix || '';
+    const state = { v: 0 };
+    const fmt = (v) => pre + v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    ScrollTrigger.create({
+      trigger: '#gap', start: 'top 75%', once: true,
+      onEnter: () => gsap.to(state, { v: target, duration: 2.4, ease: 'power3.out', onUpdate: () => (el.textContent = fmt(state.v)) }),
+    });
+  });
+  gsap.from('.gap__vs', { scale: 0, rotation: -40, duration: 1.2, ease: 'elastic.out(1,.5)', scrollTrigger: { trigger: '#gap', start: 'top 70%' } });
+  gsap.from('.act', { y: 40, opacity: 0, duration: 1, stagger: 0.18, ease: 'power3.out', scrollTrigger: { trigger: '.acts__list', start: 'top 88%' } });
+  const stepsLine = $('.steps__line path');
+  if (stepsLine) {
+    stepsLine.setAttribute('pathLength', '1');
+    stepsLine.style.strokeDasharray = '1';
+    stepsLine.style.strokeDashoffset = '1';
+    gsap.to(stepsLine, { strokeDashoffset: 0, ease: 'none', scrollTrigger: { trigger: '.steps__list', start: 'top 70%', end: 'bottom 60%', scrub: 0.5 } });
+  }
+  gsap.from('.steps__list li', { x: 40, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out', scrollTrigger: { trigger: '.steps__list', start: 'top 85%' } });
+  gsap.from('.reckon', { y: 40, opacity: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.reckon', start: 'top 88%' } });
+
   /* ---------- Finale & footer ---------- */
   gsap.to('.finale__star--a', { y: -120, ease: 'none', scrollTrigger: { trigger: '.finale', start: 'top bottom', end: 'bottom top', scrub: true } });
   gsap.to('.finale__star--b', { y: 140, ease: 'none', scrollTrigger: { trigger: '.finale', start: 'top bottom', end: 'bottom top', scrub: true } });
